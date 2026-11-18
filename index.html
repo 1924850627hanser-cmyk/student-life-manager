@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Student Life Manager · 학생 생활 관리 시스템 · 留学生活管理系统</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="app-header">
+    <h1>Student Life Manager</h1>
+    <p class="subtitle">학생 생활 관리 시스템 · 留学生活管理系统</p>
+  </header>
+
+  <nav class="tabs" id="tabs">
+    <button class="tab active" data-tab="finance">📒 생활비<br/><span>生活费</span></button>
+    <button class="tab" data-tab="budget">🎯 예산<br/><span>生活预算</span></button>
+    <button class="tab" data-tab="todo">✅ 할 일<br/><span>待办事项</span></button>
+    <button class="tab" data-tab="exchange">💱 환율<br/><span>汇率换算</span></button>
+    <button class="tab" data-tab="korean">🇰🇷 한국어<br/><span>韩语学习</span></button>
+    <button class="tab" data-tab="data">🗂️ 데이터<br/><span>数据管理</span></button>
+  </nav>
+
+  <main>
+    <!-- ========== 生活费 / 생활비 ========== -->
+    <section class="panel active" id="panel-finance">
+      <h2>생활비 관리 · 生活费管理</h2>
+      <form id="tx-form" class="card form-grid">
+        <label>유형 · 类型
+          <select id="tx-type" required>
+            <option value="income">수입 · 收入</option>
+            <option value="expense" selected>지출 · 支出</option>
+          </select>
+        </label>
+        <label>금액 · 金额 (KRW ₩)
+          <input type="number" id="tx-amount" min="0" step="1" placeholder="예: 50000" required />
+        </label>
+        <label>날짜 · 日期
+          <input type="date" id="tx-date" required />
+        </label>
+        <label>분류 · 分类
+          <select id="tx-category">
+            <option value="식비">식비 · 餐饮</option>
+            <option value="교통">교통 · 交通</option>
+            <option value="주거">주거 · 住宿</option>
+            <option value="학습">학습 · 学习</option>
+            <option value="문화">문화 · 娱乐</option>
+            <option value="기타">기타 · 其他</option>
+          </select>
+        </label>
+        <label class="wide">메모 · 备注
+          <input type="text" id="tx-note" maxlength="60" placeholder="메모를 입력하세요 · 填写备注" />
+        </label>
+        <button type="submit" class="btn primary">추가 · 添加</button>
+      </form>
+
+      <div class="summary card" id="tx-summary">
+        <div class="sum-item"><span>총수입 · 总收入</span><strong id="sum-income">₩0</strong></div>
+        <div class="sum-item"><span>총지출 · 总支出</span><strong id="sum-expense">₩0</strong></div>
+        <div class="sum-item"><span>잔액 · 余额</span><strong id="sum-balance">₩0</strong></div>
+      </div>
+
+      <div class="card">
+        <h3>내역 목록 · 明细列表</h3>
+        <ul id="tx-list" class="list"></ul>
+        <p id="tx-empty" class="empty">내역이 없습니다 · 暂无记录</p>
+      </div>
+    </section>
+
+    <!-- ========== 预算 / 예산 ========== -->
+    <section class="panel" id="panel-budget">
+      <h2>생활 예산 · 生活预算</h2>
+      <form id="budget-form" class="card form-grid">
+        <label class="wide">월 예산 · 每月预算 (KRW ₩)
+          <input type="number" id="budget-amount" min="0" step="1" placeholder="예: 500000" required />
+        </label>
+        <button type="submit" class="btn primary">저장 · 保存</button>
+      </form>
+      <div class="card budget-status">
+        <div class="sum-item"><span>설정 예산 · 预算金额</span><strong id="bud-set">₩0</strong></div>
+        <div class="sum-item"><span>사용 금액 · 已使用</span><strong id="bud-used">₩0</strong></div>
+        <div class="sum-item"><span>남은 금액 · 剩余金额</span><strong id="bud-left">₩0</strong></div>
+        <div class="progress">
+          <div class="progress-bar" id="bud-bar"></div>
+        </div>
+        <p class="ratio" id="bud-ratio">사용 비율 · 使用比例: 0%</p>
+      </div>
+    </section>
+
+    <!-- ========== 待办 / 할 일 ========== -->
+    <section class="panel" id="panel-todo">
+      <h2>할 일 목록 · 待办事项</h2>
+      <form id="todo-form" class="card form-grid">
+        <label class="wide">할 일 · 任务内容
+          <input type="text" id="todo-text" maxlength="120" placeholder="예: 도서관 가기 · 例：去图书馆" required />
+        </label>
+        <button type="submit" class="btn primary">추가 · 添加</button>
+      </form>
+      <ul id="todo-list" class="list"></ul>
+      <p id="todo-empty" class="empty">할 일이 없습니다 · 暂无待办</p>
+    </section>
+
+    <!-- ========== 汇率 / 환율 ========== -->
+    <section class="panel" id="panel-exchange">
+      <h2>환율 계산기 · 汇率计算器</h2>
+      <form id="exchange-form" class="card form-grid">
+        <label>변환할 금액 · 输入金额
+          <input type="number" id="ex-amount" min="0" step="0.01" placeholder="0" required />
+        </label>
+        <label>기준 통화 · 方向
+          <select id="ex-direction">
+            <option value="krw-cny">KRW → CNY (원 → 위안)</option>
+            <option value="cny-krw">CNY → KRW (위안 → 원)</option>
+          </select>
+        </label>
+        <label>환율 · 汇率 (1 KRW = ? CNY)
+          <input type="number" id="ex-rate" min="0" step="0.0001" placeholder="예: 0.0052" required />
+        </label>
+        <button type="submit" class="btn primary">계산 · 换算</button>
+      </form>
+      <div class="card result-card">
+        <p id="ex-result">결과 · 结果: —</p>
+      </div>
+    </section>
+
+    <!-- ========== 韩语学习 / 한국어 ========== -->
+    <section class="panel" id="panel-korean">
+      <h2>한국어 학습 · 韩语学习</h2>
+      <div class="card flashcard">
+        <p class="card-index" id="word-index">1 / 0</p>
+        <p class="word-ko" id="word-ko">단어 · 单词</p>
+        <p class="word-zh" id="word-zh">중국어 설명 · 中文解释</p>
+        <div class="row-actions">
+          <button class="btn" id="word-prev">← 이전 · 上一个</button>
+          <button class="btn" id="word-next">다음 → · 下一个</button>
+        </div>
+      </div>
+      <div class="card">
+        <h3>유용한 표현 · 留学常用表达</h3>
+        <ul id="expr-list" class="list expr-list"></ul>
+      </div>
+    </section>
+
+    <!-- ========== 数据 / 데이터 ========== -->
+    <section class="panel" id="panel-data">
+      <h2>데이터 관리 · 数据管理</h2>
+      <div class="card">
+        <p class="hint">데이터는 브라우저 로컬 저장공간(localStorage)에 자동 저장됩니다.<br/>
+          数据自动保存在浏览器本地存储（localStorage）。</p>
+        <div class="row-actions">
+          <button class="btn primary" id="btn-export">JSON 내보내기 · 导出 JSON</button>
+          <label class="btn file-btn">
+            JSON 가져오기 · 导入 JSON
+            <input type="file" id="file-import" accept="application/json,.json" hidden />
+          </label>
+          <button class="btn danger" id="btn-clear">모두 삭제 · 清空数据</button>
+        </div>
+        <p id="data-msg" class="msg"></p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="app-footer">
+    <p>Open Source Software 4570-01 · Student Life Manager · HTML / CSS / JavaScript</p>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>

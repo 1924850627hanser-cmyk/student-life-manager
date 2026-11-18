@@ -1,0 +1,16 @@
+# OS / editor
+Thumbs.db
+.DS_Store
+*.log
+.vscode/
+.idea/
+
+# Dependencies (none expected for this plain front-end project)
+node_modules/
+package-lock.json
+
+# Local env / secrets — never commit
+.env
+*.key
+*.pem
+config.local.js
