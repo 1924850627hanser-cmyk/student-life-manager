@@ -67,5 +67,5 @@ All main titles, menus, buttons, hints and results are shown bilingually in Kore
 
 ## 👤 제출자 · 提交人
 
-- GitHub: `sjkang`
+- GitHub: `1924850627hanser-cmyk`
 - Email: `sjkang@daegu.ac.kr`
